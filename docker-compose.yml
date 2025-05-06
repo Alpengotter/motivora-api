@@ -1,6 +1,4 @@
 # docker-compose.yml
-name: motivora-app
-
 services:
   db:
     image: postgres:16
