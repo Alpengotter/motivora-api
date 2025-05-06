@@ -1,7 +1,5 @@
 # docker-compose.yml
-networks:
-  my_network:
-    driver: bridge
+name: motivora-app
 
 services:
   db:
@@ -17,6 +15,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - my_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "localhost", "-p", "5432"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   api:
     build: .
@@ -31,10 +34,17 @@ services:
       DB_NAME: motivoradb
       DB_SSLMODE: disable
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: on-failure
     networks:
       - my_network
 
 volumes:
   postgres_data:
+    name: postgres_data
+
+networks:
+  my_network:
+    name: my_network
+    driver: bridge
