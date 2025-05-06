@@ -1,6 +1,10 @@
 # docker-compose.yml
 version: '3.8'
 
+networks:
+  my_network:
+    driver: bridge
+
 services:
   db:
     image: postgres:16
@@ -13,6 +17,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
 
   api:
     build: .
@@ -25,9 +31,12 @@ services:
       DB_USER: motivora-db-user
       DB_PASSWORD: BNH1271q
       DB_NAME: motivoradb
+      DB_SSLMODE: disable
     depends_on:
       - db
     restart: on-failure
+    networks:
+      - my_network
 
 volumes:
   postgres_data:
