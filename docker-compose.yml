@@ -1,5 +1,6 @@
 # docker-compose.yml
 version: '3'
+
 services:
   db:
     image: postgres:16
@@ -33,14 +34,14 @@ services:
       DB_NAME: motivoradb
       DB_SSLMODE: disable
     depends_on:
-      db:
-        condition: service_healthy
+      - db  # Теперь это массив строк (без условия service_healthy)
     restart: on-failure
     networks:
       - my_network
 
 volumes:
   postgres_data:
+
 networks:
   my_network:
     external: true
