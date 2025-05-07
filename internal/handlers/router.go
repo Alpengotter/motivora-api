@@ -31,14 +31,14 @@ func GetEmployersHandler(w http.ResponseWriter, r *http.Request) {
 	limit, _ := strconv.Atoi(limitStr)
 
 	// Вызов GetUsers из db
-	companies, err := GetUsers(offset, limit)
+	user, err := GetUsers(offset, limit)
 	if err != nil {
-		http.Error(w, "Error fetching companies", http.StatusInternalServerError)
+		http.Error(w, "Error fetching employers", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(companies)
+	_ = json.NewEncoder(w).Encode(user)
 }
 
 func GetEmployerByIDHandler(w http.ResponseWriter, r *http.Request) {
